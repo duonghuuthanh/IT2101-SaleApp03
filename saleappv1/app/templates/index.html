@@ -16,7 +16,7 @@
                 <img class="card-img-top" src="{{ p.image }}" alt="Card image">
                 <div class="card-body">
                     <h4 class="card-title">{{ p.name }}</h4>
-                    <p class="card-text">{{ p.price }} VNĐ</p>
+                    <p class="card-text">{{ "{:,.0f}".format(p.price) }} VNĐ</p>
                     <a href="#" class="btn btn-primary">Xem chi tiết</a>
                     <a href="javascript:;" onclick="addToCart({{p.id}}, '{{p.name}}', {{p.price}})" class="btn btn-danger">Đặt hàng</a>
                 </div>

@@ -14,10 +14,18 @@
                     <a class="nav-link" href="/?cate_id={{c.id}}">{{ c.name }}</a>
                 </li>
                 {% endfor %}
+                 {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-info" href="/">Chào {{ current_user.username }} !</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-info" href="/login">Đăng nhập</a>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link text-danger" href="/cart">&#128722; <span class="badge bg-danger cart-counter">{{ cart_stats.total_quantity }}</span></a>
                 </li>
-
             </ul>
             <form class="d-flex" method="get" action="/">
                 <input class="form-control me-2" type="text" name="kw" placeholder="Nhập từ khóa...">
