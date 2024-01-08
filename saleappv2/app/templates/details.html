@@ -1,0 +1,50 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Chi tiết sản phẩm{% endblock %}
+
+{% block content %}
+<h1 class="text-center text-info">CHI TIẾT SẢN PHẨM</h1>
+
+<div class="row">
+    <div class="col-md-5 col-xs-12">
+        <img src="{{ product.image }}" class="img-fluid rounded" />
+    </div>
+    <div class="col-md-7 col-xs-12">
+        <h1>{{ product.name }}</h1>
+        <h2 class="text-danger">{{ product.price }} VNĐ</h2>
+    </div>
+</div>
+
+{% if current_user.is_authenticated %}
+<div>
+    <textarea class="form-control" rows="5" id="comment" name="text" placeholder="Nội dung bình luận..."></textarea>
+    <button class="btn btn-info mt-1" onclick="addComment({{product.id}})">Thêm bình luận</button>
+</div>
+{% else %}
+<p>Vui lòng <a href="/login?next=/products/{{product.id}}">đăng nhập</a> để bình luận!</p>
+{% endif %}
+
+<div id="comments" class="mt-2">
+    {% for c in comments %}
+    <div class="row alert alert-info">
+        <div class="col-md-1 col-xs-4">
+            <img src="{{c.user.avatar}}" class="img-fluid rounded" />
+        </div>
+        <div class="col-md-11 col-xs-8">
+            <p><strong>{{c.content}}</strong></p>
+            <p>Bình luận lúc: <span class="date">{{ c.created_date }}</span></p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment-with-locales.min.js"></script>
+<script>
+    window.onload = function() {
+        let dates = document.getElementsByClassName("date");
+        for (let d of dates)
+            d.innerText = moment(d.innerText).locale("vi").fromNow();
+    }
+</script>
+{% endblock %}

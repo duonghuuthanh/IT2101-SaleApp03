@@ -2,5 +2,60 @@
 
 {% block body %}
 <h1 class="text-center text-info">THÔNG KÊ VÀ BÁO CÁO</h1>
+<div class="row">
+  <div class="col-md-5 col-xs-12">
+    <table class="table">
+      <tr>
+        <th>Id</th>
+        <th>Tên sản phẩm</th>
+        <th>Doanh thu</th>
+      </tr>
+      {% for s in stats %}
+      <tr>
+        <td>{{s[0]}}</td>
+        <td>{{s[1]}}</td>
+        <td>{{s[2]}} VNĐ</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="col-md-7 col-xs-12">
+    <canvas id="myChart"></canvas>
+  </div>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+window.onload = function() {
+  const ctx = document.getElementById('myChart');
+
+  let data = [];
+  let labels = [];
+
+  {% for s in stats %}
+  labels.push('{{s[1]}}')
+  data.push({{s[2]}});
+  {% endfor %}
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '# Doanh thu',
+        data: data,
+        borderWidth: 1,
+        backgroundColor: ['red', 'green', 'blue', 'gold', 'silver']
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+</script>
 {% endblock %}

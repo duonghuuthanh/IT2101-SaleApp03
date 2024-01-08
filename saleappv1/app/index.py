@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, jsonify, session
 import dao
 import utils
 from app import app, login
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 
 @app.route("/")
@@ -20,6 +20,13 @@ def index():
 
     return render_template('index.html',
                            products=prods, pages=math.ceil(num/page_size))
+
+
+@app.route('/products/<id>')
+def details(id):
+    return render_template('details.html',
+                           product=dao.get_product_by_id(id),
+                           comments=dao.get_comments(id))
 
 
 @app.route('/admin/login', methods=['post'])
@@ -127,6 +134,51 @@ def login_view():
         return redirect("/")
 
     return render_template('login.html')
+
+
+@app.route("/register", methods=['get', 'post'])
+def register():
+    err_msg = None
+    if request.method.__eq__('POST'):
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
+        if password.__eq__(confirm):
+            try:
+                dao.add_user(name=request.form.get('name'),
+                             username=request.form.get('username'),
+                             password=password,
+                             avatar=request.files.get('avatar'))
+            except Exception as ex:
+                err_msg = str(ex)
+            else:
+                return redirect('/login')
+        else:
+            err_msg = 'Mật khẩu KHÔNG khớp!'
+
+    return render_template('register.html', err_msg=err_msg)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect('/login')
+
+
+@app.route('/api/products/<id>/comments', methods=['post'])
+def add_comment(id):
+    try:
+        c = dao.add_comment(product_id=id, content=request.json.get('content'))
+    except Exception as ex:
+        return jsonify({'status': 500, 'err_msg': str(ex)})
+    else:
+        return jsonify({'status': 200, 'comment': {
+            'content': c.content,
+            'created_date': c.created_date,
+            'user': {
+                'avatar': c.user.avatar
+            }
+        }})
+
 
 
 @app.context_processor

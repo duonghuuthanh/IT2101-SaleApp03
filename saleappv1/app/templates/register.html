@@ -1,0 +1,38 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Đăng ký{% endblock %}
+
+{% block content %}
+<h1 class="text-center text-info mt-1">ĐĂNG KÝ NGƯỜI DÙNG</h1>
+
+{% if err_msg %}
+<div class="alert alert-danger">
+  {{ err_msg }}
+</div>
+{% endif %}
+
+<form method="post" action="/register" enctype="multipart/form-data">
+  <div class="mb-3 mt-3">
+    <label for="name" class="form-label">Tên:</label>
+    <input type="text" class="form-control" id="name" placeholder="Tên" name="name">
+  </div>
+  <div class="mb-3 mt-3">
+    <label for="username" class="form-label">Tên đăng nhập:</label>
+    <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập" name="username">
+  </div>
+  <div class="mb-3">
+    <label for="pwd" class="form-label">Mật khẩu:</label>
+    <input type="password" class="form-control" id="pwd" placeholder="Mật khẩu" name="password">
+  </div>
+  <div class="mb-3">
+    <label for="confirm" class="form-label">Xác nhận mật khẩu:</label>
+    <input type="password" class="form-control" id="confirm" placeholder="Xác nhận mật khẩu" name="confirm">
+  </div>
+  <div class="mb-3">
+    <label for="avatar" class="form-label">Ảnh đại diện:</label>
+    <input type="file" accept=".png,.jpg" class="form-control" id="avatar" name="avatar">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Đăng ký</button>
+</form>
+{% endblock %}
